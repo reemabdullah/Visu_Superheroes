@@ -62,7 +62,7 @@ Superheroes <- read.csv("superheroes.csv")
 library(dplyr)
 library(ggcorrplot)
 # Correlation matrix
-corr <- round(cor(select(Superheroes,class,intelligence,strength,speed,durability,power,combat,height.cm,weight.kg)), 1)
+corr <- round(cor(select(Superheroes, class, intelligence, strength, speed, durability, power, combat, height.cm, weight.kg)), 1)
 
 # Correlogram of Superheroes
 ggcorrplot(corr, hc.order = TRUE, 
@@ -72,12 +72,12 @@ ggcorrplot(corr, hc.order = TRUE,
            method = "circle", 
            colors = c("tomato2", "white", "springgreen3"), 
            title = "Corrélogramme de Superheroes", 
-           ggtheme=theme_bw)
+           ggtheme = theme_bw)
 ```
 
 Nous remarquons que nous avons uniquement des corrélations positives avec *Streng/Durability* et *Class/Height* les deux corrélations les plus importantes. Elles restent cependant de qualité **moyenne**.
 
-Ce qui est intéressant c'est la corrélation *Class/Height*. En effet, la 'classe' est un indicateur de général de pouvoir, et parmis toutes les variables de statistique, celle qui est le plus corrélé positivement avec la classe est la taille.
+Ce qui est intéressant c'est la corrélation *Class/Height*. En effet, la 'classe' est un indicateur général de pouvoir, et parmis toutes les variables de statistique, celle qui est la plus corrélée positivement avec la classe c'est la taille.
 
 Voyons cela de plus près :
 
@@ -87,8 +87,10 @@ ggplot(Superheroes, aes(x = durability, y = strength))+
   theme_bw() +
   geom_point() +
   geom_smooth() +
-  labs(title = "Corrélation entre Durabilité et Strength", x = "Durabilité", y = "Force")
+  labs(title = "Corrélation entre Durabilité et Force", x = "Durabilité", y = "Force")
 ```
+
+Dans le graphe ci dessus, nous pouvons voir qu'il y a une corrélation de qualité moyenne entre la **Durabilité** et la **Force**.
 
 ```{r corr2, echo=FALSE, message=FALSE, warning=FALSE}
 #Corrélation entre Classe et Taille
@@ -99,3 +101,71 @@ ggplot(Superheroes, aes(x = class, y = height.cm)) +
   labs(title = "Corrélation entre Classe et Taille", x = "Classe", y = "Taille en cm")
 ```
 
+Ici, nous pouvons voir que la corrélation entre la classe et la taille est à nuancer. En effet, l'individu avec la plus grande taille est celui qui appartient à la classe la plus élévée. Cet individu est évidement un **outlier** qui influence fortement le coefficient de corrélation. Sans lui, il n'y aurai pas de corrélation.
+
+```{r corr2-1, echo=FALSE, message=FALSE, warning=FALSE}
+#Corrélation entre Classe et Taille
+ggplot(filter(Superheroes, height.cm < max(height.cm)), aes(x = class, y = height.cm)) +
+  theme_bw() +
+  geom_point() +
+  geom_smooth() +
+  labs(title = "Corrélation entre Classe et Taille sans le dernier individu", x = "Classe", y = "Taille en cm")
+```
+
+### Visualisation des superhéros par genre
+
+```{r gender1}
+ggplot(Superheroes, aes(x = gender, fill = alignment)) +
+  theme_bw() +
+  geom_bar() +
+  labs(title = "Alignement des superhéros par genre", x = "Genre", y = "Effectif")
+```
+
+On remarque ici que :
+
+ * Il y a plus de gentils que de méchants ou neutres
+ * Il y a plus de superhéros que de superhéroines
+ * La majorité des superhéroines sont gentilles
+ * Il y a plus de diversité de l'alignement chez les superhéros que les superhéroines
+ * Il y a très peu de neutres
+ 
+```{r gender2}
+ggplot(Superheroes, aes(x = gender, fill = publisher)) +
+  theme_bw() +
+  geom_bar() +
+  labs(title = "Alignement des superhéros par éditeur", x = "Genre", y = "Effectif")
+```
+
+Et ici que :
+
+ * Les superhéroines apparaissent plus chez éditeurs classique comme DC Comics et Marvel Comics
+ * Les superhéros male ont plus tendance à avoir leur propre éditeur
+ * Plus de variété dans les éditeurs chez les superhéros que les superhéroines
+ 
+```{r gender3}
+ggplot(Superheroes, aes(x = gender, y = intelligence, fill = alignment)) +
+  theme_bw() +
+  geom_boxplot() +
+  labs(title = "L'intelligence par alignement pour chaque genre", x = "Genre", y = "Intelligence des Superheros")
+```
+
+Puis ici que :
+
+ * Les villains sont en moyennes plus intelligents que les autres
+ * L'intelligence est mieux dispersées chez les superhéros que les superhéroines
+ * Chez les gentils les superhéros sont en moyenne plus intelligent que les superhéroines
+ * De même chez les neutres
+
+```{r gender4}
+#Boxplot weight femme/homme
+ggplot(Superheroes, aes(x= gender,y= weight.kg)) +
+  theme_bw() +
+  geom_boxplot() +
+  labs(title = "Le poids par genre", x = "Genre", y = "Taille des Superheros")
+
+#Boxplot height femme/homme
+ggplot(filter(Superheroes, height.cm < max(height.cm)), aes(x = gender, y = height.cm))+
+  theme_bw() +
+  geom_boxplot() +
+  labs(title = "La taille pour chaque genre", x = "Genre", y = "Taille des Superheros")
+```
