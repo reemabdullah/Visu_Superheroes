@@ -1,0 +1,101 @@
+---
+title: "Superheroes"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+## Présentation du projet
+
+  La visualisation des données permet de voir l'histoire qui se cache derrière les chiffres. Il s'agit de ce fait d'un outil puissant pour partager et communiquer des informations.
+
+  Pour ce projet, nous allons visualiser les données du dataset **Superheroes** que nous avons crée lors du projet de data mining.
+
+#### Petit rappel :
+
+  Le dataset **Superheroes** est composé de 283 observations décrites par 18 variables :
+
+Variable      | Description                  | Exemple
+------------- | ---------------------------- | ---------------
+name          | nom du superhéro             | Spider-man
+full.name     | identité du superhéro        | Peter Parker
+class         | indicateur général de combat | 10
+intelligence  | statistique (0-100)          | 95
+strength      | statistique (0-100)          | 55
+speed         | statistique (0-100)          | 65
+durability    | statistique (0-100)          | 75
+power         | statistique (0-100)          | 75
+combat        | statistique (0-100)          | 95
+publisher     | éditeur                      | Marvel Comics
+alignment     | alignement                   | Good (gentil)
+gender        | genre                        | Male
+race          | race                         | Human (humain)
+height.cm     | taille en cm                 | 178
+weight.kg     | poids en kg                  | 74
+eye.color     | couleur des yeux             | Hazel (noisette)
+hair.color    | couleur des cheveux          | Brown (marron)
+url           | url de l'image du superhéro  |https://www.superherodb.com/pictures2/portraits/10/100/133.jpg
+
+
+## Importation du fichier
+
+  Pour commencer, nous allons tout d'abord charger la librairie *ggplot2*, puis nous allons importer notre fichier pour créer le dataframe dans notre environement et commencer la visualisation.
+
+```{r importation}
+library(ggplot2)
+
+# load Superheroes data for analysis
+Superheroes <- read.csv("superheroes.csv")
+```
+
+## Visulation de données
+
+### Corrélogramme 
+
+  Pour commencer, mettons en évidence les corrélations entre les variables numériques avant de dresser les graphes grâce à un corrélogramme.
+
+```{r correlogramme, echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+library(ggcorrplot)
+# Correlation matrix
+corr <- round(cor(select(Superheroes,class,intelligence,strength,speed,durability,power,combat,height.cm,weight.kg)), 1)
+
+# Correlogram of Superheroes
+ggcorrplot(corr, hc.order = TRUE, 
+           type = "lower", 
+           lab = TRUE, 
+           lab_size = 3, 
+           method = "circle", 
+           colors = c("tomato2", "white", "springgreen3"), 
+           title = "Corrélogramme de Superheroes", 
+           ggtheme=theme_bw)
+```
+
+Nous remarquons que nous avons uniquement des corrélations positives avec *Streng/Durability* et *Class/Height* les deux corrélations les plus importantes. Elles restent cependant de qualité **moyenne**.
+
+Ce qui est intéressant c'est la corrélation *Class/Height*. En effet, la 'classe' est un indicateur de général de pouvoir, et parmis toutes les variables de statistique, celle qui est le plus corrélé positivement avec la classe est la taille.
+
+Voyons cela de plus près :
+
+```{r corr1, echo=FALSE, message=FALSE, warning=FALSE}
+#Corrélation entre Durabilité et Strength
+ggplot(Superheroes, aes(x = durability, y = strength))+
+  theme_bw() +
+  geom_point() +
+  geom_smooth() +
+  labs(title = "Corrélation entre Durabilité et Strength", x = "Durabilité", y = "Force")
+```
+
+```{r corr2, echo=FALSE, message=FALSE, warning=FALSE}
+#Corrélation entre Classe et Taille
+ggplot(Superheroes, aes(x = class, y = height.cm)) +
+  theme_bw() +
+  geom_point() +
+  geom_smooth() +
+  labs(title = "Corrélation entre Classe et Taille", x = "Classe", y = "Taille en cm")
+```
+
