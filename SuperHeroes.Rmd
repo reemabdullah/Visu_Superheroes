@@ -118,7 +118,7 @@ ggplot(filter(Superheroes, height.cm < max(height.cm)), aes(x = class, y = heigh
 ggplot(Superheroes, aes(x = gender, fill = alignment)) +
   theme_bw() +
   geom_bar() +
-  labs(title = "Alignement des superhéros par genre", x = "Genre", y = "Effectif")
+  labs(title = "Alignement des superhéros par genre", x = "Genre", y = "Effectif", fill = "Alignement")
 ```
 
 On remarque ici que :
@@ -133,7 +133,9 @@ On remarque ici que :
 ggplot(Superheroes, aes(x = gender, fill = publisher)) +
   theme_bw() +
   geom_bar() +
-  labs(title = "Alignement des superhéros par éditeur", x = "Genre", y = "Effectif")
+  labs(title = "Alignement des superhéros par éditeur", x = "Genre", y = "Effectif", fill = "Éditeur") +
+  theme(legend.position = "right", legend.key.size = unit(0.5, "cm"), legend.key.width = unit(0.5,"cm")) 
+
 ```
 
 Et ici que :
@@ -146,26 +148,42 @@ Et ici que :
 ggplot(Superheroes, aes(x = gender, y = intelligence, fill = alignment)) +
   theme_bw() +
   geom_boxplot() +
-  labs(title = "L'intelligence par alignement pour chaque genre", x = "Genre", y = "Intelligence des Superheros")
+  labs(title = "L'intelligence par alignement pour chaque genre", x = "Genre", y = "Intelligence des Superheros", fill = "Alignement")
 ```
 
-Puis ici que :
+Finalement ici que :
 
  * Les villains sont en moyennes plus intelligents que les autres
  * L'intelligence est mieux dispersées chez les superhéros que les superhéroines
  * Chez les gentils les superhéros sont en moyenne plus intelligent que les superhéroines
  * De même chez les neutres
 
-```{r gender4}
-#Boxplot weight femme/homme
-ggplot(Superheroes, aes(x= gender,y= weight.kg)) +
-  theme_bw() +
-  geom_boxplot() +
-  labs(title = "Le poids par genre", x = "Genre", y = "Taille des Superheros")
 
-#Boxplot height femme/homme
-ggplot(filter(Superheroes, height.cm < max(height.cm)), aes(x = gender, y = height.cm))+
+### Visualisation des données par l'apparence
+```{r app1}
+ggplot(Superheroes,aes(x = alignment, fill = eye.color))+
   theme_bw() +
-  geom_boxplot() +
-  labs(title = "La taille pour chaque genre", x = "Genre", y = "Taille des Superheros")
+  geom_bar() +
+  scale_fill_manual("Couleur des yeux", values = c("#FFBF00","Black","Blue","Blue","lightblue","Brown","Brown",
+                                                   "Gold","Green","Turquoise","Grey","burlywood3","blue",
+                                                   "Purple","Red","gray","Violet","White","Yellow", "Yellow")) +
+  theme(legend.position = "right", legend.key.size = unit(0.5, "cm"), legend.key.width = unit(0.5,"cm"))  +
+  labs(title="Nombre de Superhéros par la couleur des yeux", x = "Alignement", y= "Effectif")
 ```
+
+En ce qui concerne l'apparence des superhéros on remarque qu'il y a un biais. En effet, les gentils ont plus tendances à avoir les yeux **bleus** contrairement aux villains qui sont un peu plus diversifié avec un peu plus de rouge. 
+
+```{r app2}
+ggplot(Superheroes,aes(x = alignment, fill = hair.color))+
+  theme_bw() +
+  geom_bar() +
+  scale_fill_manual("Couleur des cheveux", values = c("#FFBF00","Black","Black","darkblue","Yellow","Yellow",
+                                                      "Blue","Brown","burlywood3","Brown","Green","Grey",
+                                                      "Magenta","antiquewhite1","Orange","Purple","Red",
+                                                      "Orange","Grey","lightyellow","white")) +
+  theme(legend.position = "right", legend.key.size = unit(0.5, "cm"), legend.key.width = unit(0.5,"cm"))  +
+  labs(title="Nombre de Superhéros par la couleur des cheveux", x = "Alignement", y = "Effectif", fill = "Couleur des cheveux")
+```
+
+De même, on peut voir que il y a plus de blonds chez les gentils que les villains. **On a donc le gentil superhéro stéréotipique blond aux yeux bleus.**
+
