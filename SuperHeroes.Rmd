@@ -171,8 +171,9 @@ On remarque que :
 ggplot(Superheroes, aes(x = alignment, fill = race)) +
   theme_bw() +
   geom_bar() +
-  labs(title = "Effectif des superhéros par race pour chaque alignement", x = "Alignement", y = "Effectif", fill = "Race")
+  labs(title = "Effectif des superhéros par race pour chaque alignement", x = "Alignement", y = "Effectif", fill = "Race") 
 ```
+
 On remarque que :
 
  * Il y a plus de gentils que de méchants
