@@ -58,7 +58,7 @@ Superheroes <- read.csv("superheroes.csv")
 
   Pour commencer, mettons en évidence les corrélations entre les variables quantitatives avant de dresser les graphes grâce à un corrélogramme.
 
-```{r correlogramme, echo=FALSE, message=FALSE, warning=FALSE}
+```{r correlogramme, echo=TRUE, message=FALSE, warning=FALSE}
 library(dplyr)
 library(ggcorrplot)
 # Correlation matrix
@@ -81,7 +81,7 @@ Ce qui est intéressant c'est la corrélation *Class/Height*. En effet, la 'clas
 
 Voyons cela de plus près :
 
-```{r corr1, echo=FALSE, message=FALSE, warning=FALSE}
+```{r corr1, echo=TRUE, message=FALSE, warning=FALSE}
 #Corrélation entre Durabilité et Strength
 ggplot(Superheroes, aes(x = durability, y = strength))+
   theme_bw() +
@@ -92,7 +92,7 @@ ggplot(Superheroes, aes(x = durability, y = strength))+
 
 Dans le graphe ci dessus, nous pouvons voir qu'il y a une corrélation de qualité moyenne entre la **Durabilité** et la **Force**.
 
-```{r corr2, echo=FALSE, message=FALSE, warning=FALSE}
+```{r corr2, echo=TRUE, message=FALSE, warning=FALSE}
 #Corrélation entre Classe et Taille
 ggplot(Superheroes, aes(x = class, y = height.cm)) +
   theme_bw() +
@@ -103,7 +103,7 @@ ggplot(Superheroes, aes(x = class, y = height.cm)) +
 
 Ici, nous pouvons voir que la corrélation entre la classe et la taille est à nuancer. En effet, l'individu avec la plus grande taille est celui qui appartient à la classe la plus élévée. Cet individu est évidement un **outlier** qui influence fortement le coefficient de corrélation. Sans lui, il n'y aurai pas de corrélation.
 
-```{r corr2-1, echo=FALSE, message=FALSE, warning=FALSE}
+```{r corr2-1, echo=TRUE, message=FALSE, warning=FALSE}
 #Corrélation entre Classe et Taille
 ggplot(filter(Superheroes, height.cm < max(height.cm)), aes(x = class, y = height.cm)) +
   theme_bw() +
